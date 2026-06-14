@@ -31,6 +31,7 @@ import { runWorkspaceList, runWorkspaceUse, runWorkspaceCreate } from './workspa
 import { runDocsIngest } from './docs.js';
 import { runScheduleAdd, runScheduleList, runScheduleRemove } from './schedule.js';
 import { runTelegramStart } from './telegram.js';
+import { runDaemonStart } from './daemon.js';
 import { runToolsList } from './tools.js';
 
 const program = new Command();
@@ -115,6 +116,12 @@ program
   .command('start')
   .description('Long-running bot that routes inbound messages through the orchestrator.')
   .action(async () => { await runTelegramStart(); });
+
+const daemon = program.command('daemon').description('Long-running scheduler + telegram (if configured).');
+daemon
+  .command('start')
+  .description('Start the daemon (scheduler + telegram bot if TELEGRAM_BOT_TOKEN is set).')
+  .action(async () => { await runDaemonStart(); });
 
 program
   .command('tools')

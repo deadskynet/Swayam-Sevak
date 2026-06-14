@@ -107,6 +107,17 @@ swayam schedule add "<NL>"    add a cron automation
 swayam schedule list/remove
 
 swayam telegram start         long-running bot + scheduler
+swayam daemon start           long-running scheduler (+ telegram if configured)
+```
+
+### Run as a background daemon (macOS)
+
+To have schedules fire reliably without keeping a terminal open:
+
+```bash
+bash scripts/launchd/install.sh
+# logs land in data/daemon.{out,err}.log
+# uninstall: bash scripts/launchd/install.sh --uninstall
 ```
 
 ## Project layout
