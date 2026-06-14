@@ -107,8 +107,19 @@ swayam schedule add "<NL>"    add a cron automation
 swayam schedule list/remove
 
 swayam telegram start         long-running bot + scheduler
+swayam web                    local web UI on http://localhost:7878
 swayam daemon start           long-running scheduler (+ telegram if configured)
 ```
+
+### Web UI
+
+```bash
+npm run dev -- web
+# → swayam-sevak web running at http://localhost:7878
+# → token: <hash>
+```
+
+A single-page app with five tabs: chat (SSE-streamed, with inline trace and confirmation buttons), memory (workspace + global MEMORY.md, recent daily logs as tiles), sessions (JSONL trace viewer), documents (drag-drop ingest + the per-workspace index), and workspaces (switch + create). Bound to `127.0.0.1` only; every POST is gated by a per-process token. No auth UI — same trust boundary as the shell.
 
 ### Run as a background daemon (macOS)
 
@@ -135,6 +146,8 @@ src/
   scheduler/                  nl-to-cron · persistent cron registry
   briefing/                   daily · weekly
   integrations/               gogcli · telegram
+  web/                        http server + route handlers (used by `swayam web`)
+  web-ui/                     vanilla TS + html + css for the local web app
 data/                         runtime state, gitignored
   memory/                     MEMORY.md + YYYY-MM-DD.md
   workspaces/                 per-workspace memory + documents
@@ -151,7 +164,8 @@ I wanted an assistant whose memory I could read. If a recommendation is going to
 
 - RAG is TF-IDF over a JSON file, not vector embeddings. Fine to a few thousand chunks; the embedding upgrade is on the roadmap.
 - Telegram confirmations are text replies, not inline buttons.
-- Schedules need a long-running parent process. No launchd unit yet.
+- Web UI streams the *delivery* of the reply (chunked output) but not the *generation* (the underlying provider isn't streaming-aware in v1). For Anthropic/HF this is invisible at chat speed; true token-by-token streaming is a future provider-interface change.
+- Schedules need a long-running parent process (`swayam daemon start` or `swayam telegram start`).
 - HuggingFace tool calling is emulated with a JSON envelope in the system prompt — reliable on Llama-3.1-8B+ class models, flaky on tinier ones.
 - Single user. Single machine. By design.
 

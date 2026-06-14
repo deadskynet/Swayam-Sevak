@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>swayam-sevak</title>
+<!--SWAYAM_TOKEN-->
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <span class="brand">swayam-sevak</span>
+  <span class="meta" id="meta-workspace">workspace: …</span>
+  <span class="meta" id="meta-provider">provider: …</span>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button class="tab active" data-tab="chat"        role="tab">Chat</button>
+  <button class="tab"        data-tab="memory"      role="tab">Memory</button>
+  <button class="tab"        data-tab="sessions"    role="tab">Sessions</button>
+  <button class="tab"        data-tab="docs"        role="tab">Documents</button>
+  <button class="tab"        data-tab="workspaces"  role="tab">Workspaces</button>
+</nav>
+
+<main>
+  <section class="pane active" id="pane-chat" role="tabpanel">
+    <div id="chat-log" class="chat-log"></div>
+    <div id="chat-pending" class="chat-pending hidden"></div>
+    <form id="chat-form" class="chat-form">
+      <textarea id="chat-input" placeholder="Type a message — Ctrl+Enter to send" rows="2"></textarea>
+      <button type="submit">send</button>
+    </form>
+  </section>
+
+  <section class="pane" id="pane-memory" role="tabpanel">
+    <div class="memory-grid">
+      <div class="memory-col">
+        <h3>Workspace MEMORY.md</h3>
+        <div id="memory-workspace" class="markdown"></div>
+      </div>
+      <div class="memory-col">
+        <h3>Recent daily logs</h3>
+        <ul id="memory-logs" class="log-list"></ul>
+        <div id="memory-log-content" class="markdown"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pane" id="pane-sessions" role="tabpanel">
+    <div class="sessions-grid">
+      <ul id="sessions-list" class="sessions-list"></ul>
+      <div id="session-events" class="session-events"></div>
+    </div>
+  </section>
+
+  <section class="pane" id="pane-docs" role="tabpanel">
+    <div id="docs-drop" class="docs-drop">
+      <p>Drop a file here, or <label class="link">choose<input type="file" id="docs-file" hidden></label> to ingest.</p>
+      <p class="hint">PDF · DOCX · MD · TXT</p>
+    </div>
+    <div id="docs-status"></div>
+    <table id="docs-table" class="docs-table">
+      <thead><tr><th>path</th><th>chunks</th><th>ingested</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section class="pane" id="pane-workspaces" role="tabpanel">
+    <ul id="workspaces-list" class="workspaces-list"></ul>
+    <form id="workspace-create-form" class="ws-create">
+      <input id="workspace-name" placeholder="new workspace name" pattern="[a-z0-9][a-z0-9_-]*">
+      <button type="submit">create</button>
+    </form>
+  </section>
+</main>
+
+<script type="module" src="/assets/app.ts"></script>
+</body>
+</html>

@@ -5,6 +5,7 @@
 ```
 User
  └─ CLI (commander + readline)        ── or Telegram (long-poll)
+ └─ Web UI  (http server + vanilla TS) ── single-page, localhost-only
      └─ Orchestrator
          ├─ ContextBuilder ── reads SOUL/IDENTITY/AGENTS/TOOLS/USER + memory + workspace
          ├─ PromptAssembler ── deterministic system-prompt ordering
@@ -47,6 +48,8 @@ A turn is one shape:
 | `src/orchestrator/orchestrator.ts`    | The bounded turn loop.                                                  |
 | `src/integrations/gogcli.ts`          | Shell-out wrapper for `gog` (Gmail/Calendar).                           |
 | `src/integrations/telegram.ts`        | Long-poll bot routing through the orchestrator.                         |
+| `src/web/server.ts` + `src/web/routes/*` | Localhost http server + route handlers; reuses the orchestrator unchanged. |
+| `src/web-ui/*`                        | Vanilla TS + html + css frontend (no build, no React).                  |
 | `src/docs/{ingest,chunk,store}.ts`    | TF-IDF doc intelligence (PDF, MD, TXT, DOCX).                           |
 | `src/scheduler/{scheduler,nl-to-cron}.ts` | Persistent cron + LLM NL→cron.                                      |
 | `src/search/unified.ts`               | Parallel fan-out: memory + docs + gmail.                                |

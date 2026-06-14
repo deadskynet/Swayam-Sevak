@@ -18,7 +18,10 @@ All sixteen subsystems from the brief, end-to-end:
 - ✅ **Meeting prep tool** — aggregator, deterministic.
 - ✅ **Scheduler** — NL→cron, persisted in `data/schedules.json`, runs while a long-running process is up.
 - ✅ **Telegram** — long-poll, single user, confirmations via reply-yes.
-- ✅ **Explainability** — JSONL traces + daily-log mirror + `/trace` REPL command.
+- ✅ **Web UI** — `swayam web`. SSE-streamed chat, memory viewer, sessions trace, drag-drop doc ingest, workspace switching. Vanilla TS, no React, no build step.
+- ✅ **Background daemon** — `swayam daemon start` + `scripts/launchd/install.sh`.
+- ✅ **First-time-user polish** — startup warnings, friendlier REPL errors, grouped tools output.
+- ✅ **Explainability** — JSONL traces + daily-log mirror + `/trace` REPL command + Sessions tab.
 
 ## v1 — what's intentionally minimal (fully working, but a known shortcut)
 
@@ -30,14 +33,13 @@ All sixteen subsystems from the brief, end-to-end:
 
 ## v2 — backlog
 
-- **Web UI** — Next.js memory viewer + chat. The CLI surfaces enough for v1; the UI is for navigation, not capability.
+- **True streaming** — token-by-token streaming inside `LLMProvider.complete`. Right now the web UI streams *delivery* (chunked output) but the bytes all arrive together from the model.
 - **Embeddings** — swap the TF-IDF doc index for a local embedding model (e.g. `nomic-embed-text` via Ollama) when corpora grow.
 - **Vector DB** — LanceDB once embeddings are in. The `addDoc/searchIndex` interface is unchanged.
 - **Telegram inline keyboards** — proper confirmation UX with one-tap approve/deny buttons.
 - **Plugin manifest** — only when a third tool consumer appears. Today's auto-discovery is right.
 - **Multi-provider stream wrappers** — only when a third provider with idiosyncratic tool-use semantics joins.
 - **Voice / audio** — speech-to-text input via local Whisper, TTS replies.
-- **Background daemon** — launchd/systemd unit so schedules run without a foreground process.
 - **Better daily-log structure** — embedded YAML frontmatter per entry for stricter parsing (currently we rely on the `## <iso>` heading convention).
 - **Memory pruning policy** — when distillation has captured a daily log's worth, optionally archive that log under `data/memory/archive/`.
 

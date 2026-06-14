@@ -32,6 +32,7 @@ import { runDocsIngest } from './docs.js';
 import { runScheduleAdd, runScheduleList, runScheduleRemove } from './schedule.js';
 import { runTelegramStart } from './telegram.js';
 import { runDaemonStart } from './daemon.js';
+import { runWeb } from './web.js';
 import { runToolsList } from './tools.js';
 
 const program = new Command();
@@ -122,6 +123,11 @@ daemon
   .command('start')
   .description('Start the daemon (scheduler + telegram bot if TELEGRAM_BOT_TOKEN is set).')
   .action(async () => { await runDaemonStart(); });
+
+program
+  .command('web')
+  .description('Start the local web UI on http://localhost:7878 (override with SWAYAM_WEB_PORT).')
+  .action(async () => { await runWeb(); });
 
 program
   .command('tools')
