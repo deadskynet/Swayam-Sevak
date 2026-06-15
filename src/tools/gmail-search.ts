@@ -1,11 +1,10 @@
 /**
  * Tool: gmail_search — search Gmail via gogcli.
  *
- * Expected gogcli surface (subject to gog version):
- *   gog gmail search --json --max <N> -- "<query>"
+ * gogcli surface (verified against v0.27 README):
+ *   gog gmail search '<query>' --max <N> --json
  *
- * Output is parsed as JSON; if the user's gog returns a different shape, the
- * tool surfaces the raw stdout so the user can adjust.
+ * Output is JSON. We pass it through verbatim to the LLM.
  */
 import type { Tool } from './types.js';
 import { gog, gogAvailable, GogError } from '../integrations/gogcli.js';
@@ -30,7 +29,7 @@ const tool: Tool = {
     const query = String(args.query ?? '');
     const max = Number(args.max ?? 20);
     try {
-      const out = await gog(['gmail', 'search', '--json', '--max', String(max), '--', query]);
+      const out = await gog(['gmail', 'search', query, '--max', String(max), '--json']);
       return { text: out.trim() || '(no results)', data: { raw: out } };
     } catch (err) {
       if (err instanceof GogError) {

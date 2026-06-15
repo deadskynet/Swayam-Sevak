@@ -35,12 +35,12 @@ const tool: Tool = {
     let query = args.query ? String(args.query) : '';
     if (args.event_id && (await gogAvailable())) {
       try {
-        const out = await gog(['calendar', 'get', '--id', String(args.event_id), '--json']);
+        const out = await gog(['calendar', 'get', String(args.event_id), '--json']);
         sections.push(`## Event details\n${out.trim()}`);
         // Best-effort: pull the title from the JSON to seed the search.
         try {
-          const parsed = JSON.parse(out) as { title?: string; summary?: string };
-          query = query || parsed.title || parsed.summary || query;
+          const parsed = JSON.parse(out) as { summary?: string; title?: string };
+          query = query || parsed.summary || parsed.title || query;
         } catch { /* leave query as-is */ }
       } catch (err) {
         if (err instanceof GogError) sections.push(`## Event details\n(gog error: ${err.message})`);
@@ -51,7 +51,7 @@ const tool: Tool = {
     // Gmail.
     if (await gogAvailable()) {
       try {
-        const out = await gog(['gmail', 'search', '--json', '--max', '10', '--', query], {
+        const out = await gog(['gmail', 'search', query, '--max', '10', '--json'], {
           timeout: 15000,
         });
         sections.push(`## Related emails (gmail)\n${out.trim() || '(none)'}`);

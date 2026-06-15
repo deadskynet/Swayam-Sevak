@@ -76,11 +76,8 @@ export async function composeDailyBriefing(opts: {
 
 async function fetchTodayCalendar(): Promise<string> {
   if (!(await gogAvailable())) return '(gog not available; calendar skipped)';
-  const now = new Date();
-  const start = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-  const end = new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString();
   try {
-    const out = await gog(['calendar', 'events', '--json', '--from', start, '--to', end], {
+    const out = await gog(['calendar', 'events', '--today', '--json'], {
       timeout: 15000,
     });
     return out.trim() || '(no events)';
@@ -94,7 +91,7 @@ async function fetchRecentImportantEmails(): Promise<string> {
   if (!(await gogAvailable())) return '(gog not available; gmail skipped)';
   try {
     const out = await gog(
-      ['gmail', 'search', '--json', '--max', '10', '--', 'is:unread newer_than:1d'],
+      ['gmail', 'search', 'is:unread newer_than:1d', '--max', '10', '--json'],
       { timeout: 15000 },
     );
     return out.trim() || '(no recent unread)';

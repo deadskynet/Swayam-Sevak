@@ -43,7 +43,7 @@ async function searchGmail(query: string): Promise<UnifiedSearchResult['gmail']>
     return { ok: false, error: '`gog` not on PATH; gmail skipped.' };
   }
   try {
-    const out = await gog(['gmail', 'search', '--json', '--max', '5', '--', query], { timeout: 15000 });
+    const out = await gog(['gmail', 'search', query, '--max', '5', '--json'], { timeout: 15000 });
     return { ok: true, raw: out.trim() };
   } catch (err) {
     if (err instanceof GogError) return { ok: false, error: err.message };

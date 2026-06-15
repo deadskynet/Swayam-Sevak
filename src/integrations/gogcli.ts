@@ -41,6 +41,10 @@ export async function gogAvailable(): Promise<boolean> {
 /**
  * Run `gog <args...>`. Stdout is returned as a string; stderr is captured.
  * Throws GogError on non-zero exit.
+ *
+ * We always pass `--no-input` so gog never blocks on a TTY prompt — the
+ * daemon, Telegram bot, and web server are all headless. Auth issues should
+ * fail fast with a clear message rather than hang waiting for input.
  */
 export async function gog(
   args: string[],
@@ -48,7 +52,7 @@ export async function gog(
 ): Promise<string> {
   const cfg = loadRuntimeConfig();
   try {
-    const { stdout } = await execFileP(cfg.gog.bin, args, {
+    const { stdout } = await execFileP(cfg.gog.bin, ['--no-input', ...args], {
       timeout: opts.timeout ?? 30000,
       maxBuffer: 16 * 1024 * 1024,
     });
